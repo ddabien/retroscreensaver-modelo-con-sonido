@@ -8,13 +8,16 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   build:
     runs-on: macos-15
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Show Xcode version
         run: xcodebuild -version
@@ -35,7 +38,7 @@ jobs:
           ditto -c -k --sequesterRsrc --keepParent SpaceInvadersSaver.saver SpaceInvadersSaver-macos.zip
 
       - name: Upload saver artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: SpaceInvadersSaver-macos
           path: build/Build/Products/Release/SpaceInvadersSaver-macos.zip
