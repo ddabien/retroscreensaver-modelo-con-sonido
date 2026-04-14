@@ -1,6 +1,7 @@
 import Cocoa
 import ScreenSaver
 
+@objc(SpaceInvadersSaverView)
 final class SpaceInvadersSaverView: ScreenSaverView {
     private struct Bullet {
         var x: CGFloat
@@ -67,11 +68,6 @@ final class SpaceInvadersSaverView: ScreenSaverView {
         "   ###   ###     "
     ]
 
-    private var shipImage: NSImage?
-    private var invaderAImage: NSImage?
-    private var invaderBImage: NSImage?
-    private var explosionImage: NSImage?
-
     private var shipX: CGFloat = 512
     private var shipY: CGFloat = 586
     private var playerDir: CGFloat = 1
@@ -104,7 +100,6 @@ final class SpaceInvadersSaverView: ScreenSaverView {
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
         animationTimeInterval = 1.0 / 30.0
-        loadAssets()
         computeMetrics()
         resetGame()
     }
@@ -112,7 +107,6 @@ final class SpaceInvadersSaverView: ScreenSaverView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         animationTimeInterval = 1.0 / 30.0
-        loadAssets()
         computeMetrics()
         resetGame()
     }
@@ -161,26 +155,11 @@ final class SpaceInvadersSaverView: ScreenSaverView {
         ctx.restoreGState()
     }
 
-    private func loadAssets() {
-        shipImage = loadImage(named: "Ship")
-        invaderAImage = loadImage(named: "InvaderA")
-        invaderBImage = loadImage(named: "InvaderB")
-        explosionImage = loadImage(named: "Explosion")
-    }
-
-    private func loadImage(named name: String) -> NSImage? {
-        let bundle = Bundle(for: Self.self)
-        if let url = bundle.resourceURL?.appendingPathComponent("Web/assets/\(name).gif") {
-            return NSImage(contentsOf: url)
-        }
-        return nil
-    }
-
     private func computeMetrics() {
-        invaderW = max(8, (invaderAImage?.size.width ?? 24) * 0.38)
-        invaderH = max(8, (invaderAImage?.size.height ?? 16) * 0.38)
-        shipW = max(8, (shipImage?.size.width ?? 24) * 0.44)
-        shipH = max(8, (shipImage?.size.height ?? 16) * 0.44)
+        invaderW = 18
+        invaderH = 12
+        shipW = 18
+        shipH = 12
         gapX = invaderW * 1.85
         gapY = invaderH * 1.6
         stepDown = max(14, invaderH * 1.05)
@@ -463,32 +442,34 @@ final class SpaceInvadersSaverView: ScreenSaverView {
     }
 
     private func drawInvaders() {
-        let image = animationToggle ? invaderBImage : invaderAImage
         for invader in invaders where invader.alive {
             let rect = CGRect(x: round(invader.x - invaderW / 2), y: round(invader.y - invaderH / 2), width: invaderW, height: invaderH)
-            if let image {
-                image.draw(in: rect)
+            NSColor.white.setFill()
+            rect.fill()
+            if animationToggle {
+                NSColor.black.setFill()
+                CGRect(x: rect.minX + 3, y: rect.maxY - 3, width: 2, height: 2).fill()
+                CGRect(x: rect.maxX - 5, y: rect.maxY - 3, width: 2, height: 2).fill()
             } else {
-                NSColor.white.setFill()
-                rect.fill()
+                NSColor.black.setFill()
+                CGRect(x: rect.minX + 2, y: rect.maxY - 4, width: 3, height: 2).fill()
+                CGRect(x: rect.maxX - 5, y: rect.maxY - 4, width: 3, height: 2).fill()
             }
         }
     }
 
     private func drawShip() {
-        if playerExplosion.timer > 0, let explosionImage {
-            let rect = CGRect(x: round(shipX - shipW * 0.6), y: round(shipY - shipH * 0.6), width: shipW * 1.2, height: shipH * 1.2)
-            explosionImage.draw(in: rect)
+        if playerExplosion.timer > 0 {
+            NSColor.orange.setFill()
+            CGRect(x: round(shipX - 10), y: round(shipY - 10), width: 20, height: 20).fill()
+            NSColor.red.setFill()
+            CGRect(x: round(shipX - 5), y: round(shipY - 14), width: 10, height: 28).fill()
             return
         }
 
-        let rect = CGRect(x: round(shipX - shipW / 2), y: round(shipY - shipH / 2), width: shipW, height: shipH)
-        if let shipImage {
-            shipImage.draw(in: rect)
-        } else {
-            NSColor.white.setFill()
-            rect.fill()
-        }
+        NSColor.white.setFill()
+        CGRect(x: round(shipX - 9), y: round(shipY - 4), width: 18, height: 8).fill()
+        CGRect(x: round(shipX - 4), y: round(shipY - 10), width: 8, height: 6).fill()
     }
 
     private func drawBullets() {

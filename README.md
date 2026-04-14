@@ -1,39 +1,31 @@
 # SpaceInvadersSaver
 
-Salvapantallas de macOS basado en tu animacion de Space Invaders.
+Proyecto minimo de salvapantallas nativo para macOS.
 
-## Que genera GitHub Actions
+## Resultado
 
-El workflow compila un bundle nativo de macOS:
+GitHub Actions genera:
 
 - `SpaceInvadersSaver.saver`
 - `SpaceInvadersSaver-macos.zip`
 
-El archivo correcto para macOS es `.saver`. `\.scr` es de Windows.
-
-## Como compilar en GitHub
-
-1. Sube esta carpeta a un repositorio.
-2. Abre la pestana `Actions`.
-3. Ejecuta `Build macOS Screen Saver` o empuja un commit a `main`.
-4. Cuando termine, descarga el artifact `SpaceInvadersSaver-macos`.
-5. Descomprime el zip.
-
-## Como instalar en macOS
-
-1. Haz doble click en `SpaceInvadersSaver.saver`, o copialo a `~/Library/Screen Savers/`.
-2. Abre `System Settings > Screen Saver`.
-3. Selecciona `SpaceInvadersSaver`.
+En macOS el formato correcto es `.saver`.
 
 ## Compatibilidad
 
-- Deployment target: macOS 12 Monterey o superior.
-- El workflow compila en GitHub Actions sobre macOS 15.
-- El bundle apunta a compatibilidad desde Monterey hasta Tahoe inclusive.
+- macOS 12 Monterey o superior
+- pensado para Monterey, Ventura, Sonoma, Sequoia y Tahoe
 
-## Estructura
+## Archivos importantes
 
-- `SpaceInvadersSaver.xcodeproj`: proyecto Xcode para compilar el bundle `.saver`.
-- `SpaceInvadersSaver/SpaceInvadersSaverView.swift`: wrapper nativo del screensaver.
-- `SpaceInvadersSaver/Web/`: HTML, JS y assets del juego.
-- `.github/workflows/build-saver.yml`: build automatizado en GitHub Actions.
+- `.github/workflows/build-saver.yml`
+- `SpaceInvadersSaver.xcodeproj/project.pbxproj`
+- `SpaceInvadersSaver/Info.plist`
+- `SpaceInvadersSaver/SpaceInvadersSaverView.swift`
+
+## Uso
+
+1. Sube esta carpeta a GitHub.
+2. Ejecuta el workflow `Build macOS Screen Saver`.
+3. Descarga el artifact.
+4. Instala `SpaceInvadersSaver.saver`.
