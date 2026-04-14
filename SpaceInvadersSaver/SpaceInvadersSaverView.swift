@@ -57,9 +57,12 @@ final class SpaceInvadersSaverView: ScreenSaverView {
         webView.setValue(false, forKey: "drawsBackground")
         webView.autoresizingMask = [.width, .height]
         webView.frame = bounds
-        webView.scrollView.drawsBackground = false
-        webView.scrollView.hasHorizontalScroller = false
-        webView.scrollView.hasVerticalScroller = false
+        if let scrollView = webView.subviews.first(where: { $0 is NSScrollView }) as? NSScrollView {
+            scrollView.drawsBackground = false
+            scrollView.hasHorizontalScroller = false
+            scrollView.hasVerticalScroller = false
+            scrollView.borderType = .noBorder
+        }
 
         addSubview(webView)
     }
