@@ -104,8 +104,6 @@ final class SpaceInvadersSaverView: ScreenSaverView {
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
         animationTimeInterval = 1.0 / 30.0
-        wantsLayer = true
-        layer?.backgroundColor = NSColor.black.cgColor
         loadAssets()
         computeMetrics()
         resetGame()
@@ -114,8 +112,6 @@ final class SpaceInvadersSaverView: ScreenSaverView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         animationTimeInterval = 1.0 / 30.0
-        wantsLayer = true
-        layer?.backgroundColor = NSColor.black.cgColor
         loadAssets()
         computeMetrics()
         resetGame()
@@ -125,9 +121,22 @@ final class SpaceInvadersSaverView: ScreenSaverView {
         false
     }
 
+    override var isOpaque: Bool {
+        true
+    }
+
+    override var isFlipped: Bool {
+        true
+    }
+
+    override func startAnimation() {
+        super.startAnimation()
+        setNeedsDisplay(bounds)
+    }
+
     override func animateOneFrame() {
         update(delta: animationTimeInterval)
-        needsDisplay = true
+        setNeedsDisplay(bounds)
     }
 
     override func draw(_ rect: NSRect) {
@@ -499,4 +508,3 @@ final class SpaceInvadersSaverView: ScreenSaverView {
         }
     }
 }
-
