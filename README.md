@@ -27,9 +27,9 @@ El archivo correcto para macOS es `.saver`. `\.scr` es de Windows.
 
 ## Compatibilidad
 
-- Deployment target: macOS 14 Sonoma o superior.
+- Deployment target: macOS 12 Monterey o superior.
 - El workflow compila en GitHub Actions sobre macOS 15.
-- El bundle usa APIs compatibles con Sonoma en adelante.
+- El bundle apunta a compatibilidad desde Monterey hasta Tahoe inclusive.
 
 ## Estructura
 
