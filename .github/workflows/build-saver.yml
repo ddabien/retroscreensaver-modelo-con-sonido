@@ -1,0 +1,41 @@
+name: Build macOS Screen Saver
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Build saver bundle
+        run: |
+          xcodebuild \
+            -project SpaceInvadersSaver.xcodeproj \
+            -scheme SpaceInvadersSaver \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package artifact
+        run: |
+          cd build/Build/Products/Release
+          ditto -c -k --sequesterRsrc --keepParent SpaceInvadersSaver.saver SpaceInvadersSaver-macos.zip
+
+      - name: Upload saver artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpaceInvadersSaver-macos
+          path: build/Build/Products/Release/SpaceInvadersSaver-macos.zip
